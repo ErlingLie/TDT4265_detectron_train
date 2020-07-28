@@ -1,0 +1,7 @@
+datasets/
+output/
+*/images
+*/test
+*/train
+*.jpg
+*.json

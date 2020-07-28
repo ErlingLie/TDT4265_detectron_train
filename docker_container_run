@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import random
+gpu_id = sys.argv[1]
+#gpu_id = "'1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15'"
+python_args = " ".join(sys.argv[2:])
+
+docker_name = str(random.randint(0, 10000))
+
+docker_container = "erlingsl_{}".format(docker_name) # Replace username with your ntnu username
+pwd = os.path.dirname(os.path.abspath(__file__))
+#pwd = os.getcwd()
+
+cmd = [
+    "nvidia-docker", 
+    "run",
+    f"-u 1264800", # Set your user ID. 
+    f"--name {docker_container}", # Set name of docker container
+    "--ipc host", # --ipc=host is recommended from nvidia
+    "--rm", # remove container when exited / killed
+    f"-v {pwd}:/home/appuser/detectron2_repo/code_workspace",
+    #f"-v {pwd}:/workspace", # mount directories. This mounts current directory to /workspace in the container
+    f"-e CUDA_VISIBLE_DEVICES={gpu_id}", # Set GPU ID 
+    "--log-opt max-size=50m", # Reduce memory usage from logs
+    "-it", # Interactive
+    "erlingsl/detectron_train", # Docker image
+    f"{python_args}" # python command
+]
+command = " ".join(cmd)
+print(command)
+os.system(command)

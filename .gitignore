@@ -1,0 +1,8 @@
+videos/
+output/
+__pycache__/
+datasets/
+detections/
+output/
+output_low_lr/
+*.mp4
